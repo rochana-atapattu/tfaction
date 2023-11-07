@@ -9,7 +9,9 @@ workflow=$PLAN_WORKFLOW_NAME
 
 pr_head_sha=$(jq -r ".head.sha" "$CI_INFO_TEMP_DIR/pr.json")
 
+pwd
 ls -al
+ls -al .github/workflows
 echo "before run list"
 gh run list -w "$workflow" -b "$branch" -L 1 --json headSha,databaseId --jq '.[0]'
 body=$(gh run list -w "$workflow" -b "$branch" -L 1 --json headSha,databaseId --jq '.[0]')
