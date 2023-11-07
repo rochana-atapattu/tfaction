@@ -9,10 +9,11 @@ workflow=$PLAN_WORKFLOW_NAME
 
 pr_head_sha=$(jq -r ".head.sha" "$CI_INFO_TEMP_DIR/pr.json")
 
+echo "before run list"
 body=$(gh run list -w "$workflow" -b "$branch" -L 1 --json headSha,databaseId --jq '.[0]')
 run_id=$(echo "$body" | jq -r ".databaseId")
 head_sha=$(echo "$body" | jq -r ".headSha")
-
+echo "after run list"
 if [ "$head_sha" != "$pr_head_sha" ]; then
 	echo "::error::workflow run's headSha is different from the associated pull request's head sha"
 	github-comment post -k invalid-workflow-sha \
@@ -21,6 +22,7 @@ if [ "$head_sha" != "$pr_head_sha" ]; then
 fi
 
 tempdir=$(mktemp -d)
-
+echo "before inner download"
 gh run download -D "$tempdir" -n "$artifact_name" "$run_id"
+echo "after inner downlaod"
 cp "$tempdir/$filename" tfplan.binary
