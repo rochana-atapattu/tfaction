@@ -3,16 +3,17 @@
 set -eu
 set -o pipefail
 
-echo "test"
+echo "before download"
 bash "$GITHUB_ACTION_PATH/download_plan_file.sh"
-
+echo "after download"
 apply_output=$(mktemp)
 
+echo "before apply"
 set +e
 tfcmt -var "target:$TFACTION_TARGET" apply -- terraform apply -auto-approve -no-color -input=false tfplan.binary 2>&1 | tee "$apply_output"
 code=$?
 set -e
-
+echo "after apply"
 if [ -n "${TFACTION_DRIFT_ISSUE_NUMBER:-}" ]; then
 	tfcmt \
 		-config "$GITHUB_ACTION_PATH/tfcmt-drift.yaml" \
