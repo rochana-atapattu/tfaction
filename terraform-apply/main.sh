@@ -3,6 +3,7 @@
 set -eu
 set -o pipefail
 
+echo "test"
 bash "$GITHUB_ACTION_PATH/download_plan_file.sh"
 
 apply_output=$(mktemp)
