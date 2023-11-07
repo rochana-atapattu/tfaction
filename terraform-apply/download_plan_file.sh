@@ -11,9 +11,14 @@ pr_head_sha=$(jq -r ".head.sha" "$CI_INFO_TEMP_DIR/pr.json")
 
 echo "before run list"
 body=$(gh run list -w "$workflow" -b "$branch" -L 1 --json headSha,databaseId --jq '.[0]')
+echo $body
+
 run_id=$(echo "$body" | jq -r ".databaseId")
+echo $run_id
 head_sha=$(echo "$body" | jq -r ".headSha")
+echo $head_sha
 echo "after run list"
+
 if [ "$head_sha" != "$pr_head_sha" ]; then
 	echo "::error::workflow run's headSha is different from the associated pull request's head sha"
 	github-comment post -k invalid-workflow-sha \
