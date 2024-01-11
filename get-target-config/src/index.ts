@@ -23,6 +23,7 @@ try {
     if (targetConfig === null) {
       throw 'target config is not found in target_groups';
     }
+    console.log("----------------------------------------------------------------------------------------------------------------------------------------")
     target = workingDir.replace(targetConfig.working_directory, targetConfig.target);
     core.exportVariable('TFACTION_TARGET', target);
   } else {
