@@ -8,7 +8,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: suzuki-shunsuke/rochana-atapattu/terraform-plan@main
+    - uses: rochana-atapattu/tfaction/terraform-plan@main
       if: env.TFACTION_JOB_TYPE == 'terraform'
       with:
         github_token: ${{inputs.github_token}}
