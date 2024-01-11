@@ -2,9 +2,12 @@
 
 set -euo pipefail
 
+echo ${TFACTION_DRIFT_ISSUE_NUMBER:-}
+
 if [ -n "${TFACTION_DRIFT_ISSUE_NUMBER:-}" ]; then
 	export TFCMT_CONFIG=$GITHUB_ACTION_PATH/tfcmt-drift.yaml
 fi
+echo ${TFCMT_CONFIG:-}
 
 opts=""
 if [ "${DESTROY:-}" = true ]; then
@@ -12,7 +15,7 @@ if [ "${DESTROY:-}" = true ]; then
 	echo "::warning::The destroy option is enabled"
 fi
 set +e
-tfcmt -var "target:$TFACTION_TARGET" -var "destroy:${DESTROY:-}" plan -- \
+tfcmt -var "target:$TFACTION_TARGET" -var "destroy:${DESTROY:-}" -log-level debug plan -- \
 	terraform plan -no-color -detailed-exitcode -out tfplan.binary -input=false $opts
 code=$?
 set -e
