@@ -2,9 +2,12 @@
 
 set -euo pipefail
 
+echo ${TFACTION_DRIFT_ISSUE_NUMBER:-}
+
 if [ -n "${TFACTION_DRIFT_ISSUE_NUMBER:-}" ]; then
 	export TFCMT_CONFIG=$GITHUB_ACTION_PATH/tfcmt-drift.yaml
 fi
+echo ${TFCMT_CONFIG:-}
 
 opts=""
 if [ "${DESTROY:-}" = true ]; then
