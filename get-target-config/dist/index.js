@@ -28870,7 +28870,7 @@ try {
         throw 'Either TFACTION_TARGET or TFACTION_WORKING_DIR is required';
     }
     core.setOutput('working_directory', workingDir);
-    core.setOutput('providers_lock_opts', '-platform=windows_amd64 -platform=linux_amd64 -platform=darwin_amd64');
+    core.setOutput('providers_lock_opts', '-platform=linux_amd64 -platform=darwin_amd64');
     lib.setOutputs(['template_dir'], [targetConfig]);
     core.setOutput('enable_tfsec', getBool(config, false, 'tfsec', 'enabled'));
     core.setOutput('enable_tflint', getBool(config, true, 'tflint', 'enabled'));
