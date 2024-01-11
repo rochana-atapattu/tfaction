@@ -1,12 +1,6 @@
 name: terraform plan
 description: terraform plan
 inputs:
-  github_app_token:
-    description: |
-      GitHub Access Token
-      This input is unused.
-    required: true
-
   github_token:
     description: |
       GitHub Access Token
@@ -40,6 +34,7 @@ runs:
         PR_NUMBER: ${{ github.event.pull_request.number }}
         RENOVATE_LOGIN: ${{ steps.global-config.outputs.renovate_login }}
         HEAD_SHA: ${{github.event.pull_request.head.sha}}
+        DESTROY: ${{ steps.target-config.outputs.destroy }}
 
     - run: echo "value=terraform_plan_file_${TFACTION_TARGET//\//__}" >> "$GITHUB_OUTPUT"
       id: artifact_name
@@ -47,7 +42,7 @@ runs:
       if: |
         ! env.TFACTION_DRIFT_ISSUE_NUMBER && !fromJSON(steps.check-terraform-skip.outputs.skip_terraform)
 
-    - uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+    - uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
       if: |
         ! env.TFACTION_DRIFT_ISSUE_NUMBER && !fromJSON(steps.check-terraform-skip.outputs.skip_terraform)
       with:
