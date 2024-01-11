@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+c#!/usr/bin/env bash
 
 set -euo pipefail
 
@@ -15,7 +15,8 @@ if [ "${DESTROY:-}" = true ]; then
 	echo "::warning::The destroy option is enabled"
 fi
 set +e
-tfcmt -var "target:$TFACTION_TARGET" -var "destroy:${DESTROY:-}" -log-level debug plan -- \
+tfcmt -v
+tfcmt -var "target:$TFACTION_TARGET" -log-level debug plan -- \
 	terraform plan -no-color -detailed-exitcode -out tfplan.binary -input=false $opts
 code=$?
 set -e
