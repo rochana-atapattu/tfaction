@@ -63,7 +63,7 @@ runs:
       env:
         GLOBAL_CONFIG: ${{toJSON(steps.global-config.outputs)}}
 
-    - uses: suzuki-shunsuke/tfaction/get-target-config@main
+    - uses: rochana-atapattu/tfaction/get-target-config@main
       id: target-config
 
     - run: echo "$TARGET_CONFIG"
@@ -94,6 +94,20 @@ runs:
         aws-region: ${{ steps.target-config.outputs.aws_region }}
 
     - uses: suzuki-shunsuke/tfaction/export-aws-secrets-manager@main
+
+    - uses: google-github-actions/auth@55bd3a7c6e2ae7cf1877fd1ccb9d54c0503c457c # v2.1.2
+      id: google-backend-credentials
+      if: steps.target-config.outputs.gcp_remote_backend_service_account != ''
+      with:
+        create_credentials_file: true
+        workload_identity_provider: ${{ steps.target-config.outputs.gcp_remote_backend_workload_identity_provider != '' && steps.target-config.outputs.gcp_remote_backend_workload_identity_provider || steps.target-config.outputs.gcp_workload_identity_provider }}
+        service_account: ${{ steps.target-config.outputs.gcp_service_account }}
+        access_token_scopes: ${{ steps.target-config.outputs.gcp_remote_backend_access_token_scopes }}
+        token_format: ${{ steps.target-config.outputs.gcp_remote_backend_access_token_scopes != '' && 'access_token' || '' }}
+
+    - shell: bash
+      if: steps.target-config.outputs.gcp_remote_backend_service_account != ''
+      run: echo "GOOGLE_BACKEND_CREDENTIALS=${{ steps.google-backend-credentials.outputs.credentials_file_path }}" >> "$GITHUB_ENV"
 
     - uses: google-github-actions/auth@55bd3a7c6e2ae7cf1877fd1ccb9d54c0503c457c # v2.1.2
       if: steps.target-config.outputs.gcp_service_account != ''
