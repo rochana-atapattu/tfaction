@@ -63,7 +63,7 @@ runs:
       env:
         GLOBAL_CONFIG: ${{toJSON(steps.global-config.outputs)}}
 
-    - uses: rochana-atapattu/tfaction/get-target-config@main
+    - uses: ./get-target-config
       id: target-config
 
     - run: echo "$TARGET_CONFIG"
